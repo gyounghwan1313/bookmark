@@ -10,27 +10,31 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 from django.urls import reverse_lazy
 from .models import Bookmark
 
-class BookmarkListView(ListView):
+
+class BookmarkListView(LoginRequiredMixin, ListView):
     model = Bookmark
 
-class BookmarkCreateView(CreateView):
+class BookmarkCreateView(LoginRequiredMixin, CreateView):
     model = Bookmark
     fields = ['site_name','url']
     success_url = reverse_lazy('list')
     template_name_suffix = '_create'
 
-class BookmarkDetailView(DetailView):
+class BookmarkDetailView(LoginRequiredMixin, DetailView):
     model = Bookmark
 
-class BookmarkUpdateView(UpdateView):
+class BookmarkUpdateView(LoginRequiredMixin, UpdateView):
     model = Bookmark
     fields = ['site_name','url']
     template_name_suffix = '_update'
 
-class BookmarkDeleteView(DeleteView):
+class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
     model = Bookmark
     success_url = reverse_lazy('list')
